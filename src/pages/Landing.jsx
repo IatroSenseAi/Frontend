@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Facebook, Twitter, Linkedin } from "lucide-react";
 
@@ -57,81 +58,99 @@ export default function Landing() {
   return (
     <div className="bg-background">
       {/* Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 md:px-16 py-4 md:py-10bg-opacity-95">
-        <h1 className="text-2xl md:text-4xl font-bold font-righteous text-secondary">
-          IatroSense Ai
-        </h1>
-        {isMobile && (
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="text-secondary p-2 focus:outline-none"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 py-4">
+        <div className="w-full bg-white rounded-full shadow-md flex items-center justify-between px-4 md:px-10 py-3">
+          <div className="flex items-center">
+            <img
+              src="Logo.svg"
+              alt="Logo"
+              className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 mr-2 md:mr-3"
+            />
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold font-righteous text-secondary whitespace-nowrap">
+              IATROSENSE
+              <span className="text-primary"> AI</span>
+            </h1>
+          </div>
+
+          {isMobile && (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-secondary p-2 focus:outline-none"
             >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        )}
-        {!isMobile && (
-          <>
-            <nav className="flex-1 flex font-manrope justify-center items-center gap-6 lg:gap-12 xl:gap-20 text-secondary font-medium relative">
-              {[
-                { id: "home", label: "Accueil" },
-                { id: "why", label: "Pourquoi nous ?" },
-                { id: "about", label: "À propos" },
-                { id: "services", label: "Nos Services" },
-              ].map((link) => (
-                <div key={link.id} className="relative">
-                  <a
-                    onClick={() => handleScroll(link.id)}
-                    className={`text-base lg:text-xl cursor-pointer hover:text-primary ${
-                      active === link.id ? "font-bold" : ""
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                  {active === link.id && (
-                    <motion.div
-                      layoutId="underline"
-                      className="absolute left-0 -bottom-2 h-1 bg-primary w-8 rounded-full"
-                    />
-                  )}
-                </div>
-              ))}
-            </nav>
-            <div className="flex gap-2 md:gap-4">
-              <button className="flex flex-row justify-center font-manrope items-center px-6 md:px-12 py-2 cursor-pointer bg-primary text-white rounded-full text-sm md:text-base font-bold hover:bg-secondary transition">
-                S'inscrire
-              </button>
-              <button className="flex flex-row justify-center font-manrope items-center px-6 md:px-12 py-2 bg-accent text-secondary rounded-full text-sm md:text-base font-bold hover:bg-primary hover:text-white transition cursor-pointer">
-                Se connecter
-              </button>
-            </div>
-          </>
-        )}
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {menuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          )}
+
+          {!isMobile && (
+            <>
+              <nav className="flex-1 flex font-manrope justify-center items-center gap-4 lg:gap-8 xl:gap-12 text-secondary font-medium mx-2">
+                {[
+                  { id: "home", label: "Accueil" },
+                  { id: "why", label: "Pourquoi nous ?" },
+                  { id: "about", label: "À propos" },
+                  { id: "services", label: "Nos Services" },
+                ].map((link) => (
+                  <div key={link.id} className="relative">
+                    <a
+                      onClick={() => handleScroll(link.id)}
+                      className={`text-sm lg:text-base xl:text-lg cursor-pointer hover:text-primary ${
+                        active === link.id ? "font-bold" : ""
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                    {active === link.id && (
+                      <motion.div
+                        layoutId="underline"
+                        className="absolute left-0 -bottom-2 h-1 bg-primary w-6 rounded-full"
+                      />
+                    )}
+                  </div>
+                ))}
+              </nav>
+
+              <div className="flex flex-shrink-0 gap-2 md:gap-3">
+                <Link to="/auth?type=signup">
+                  <button className="px-4 md:px-6 lg:px-8 py-1.5 md:py-2 bg-primary text-white rounded-full text-xs md:text-sm font-bold hover:bg-secondary transition cursor-pointer whitespace-nowrap">
+                    S'inscrire
+                  </button>
+                </Link>
+                <Link to="/auth?type=login">
+                  <button className="px-4 md:px-6 lg:px-8 py-1.5 md:py-2 bg-accent text-secondary rounded-full text-xs md:text-sm font-bold hover:bg-primary hover:text-white transition cursor-pointer whitespace-nowrap">
+                    Se connecter
+                  </button>
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+
         {isMobile && menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="absolute top-full left-0 w-full bg-background shadow-lg p-4 flex flex-col items-center space-y-4"
+            className="mx-auto mt-2 w-[90%] max-w-sm bg-white rounded-2xl shadow-md p-4 flex flex-col items-center space-y-4"
           >
             {[
               { id: "home", label: "Accueil" },
@@ -142,20 +161,24 @@ export default function Landing() {
               <a
                 key={link.id}
                 onClick={() => handleScroll(link.id)}
-                className={`text-lg cursor-pointer hover:text-primary ${
+                className={`text-base cursor-pointer hover:text-primary ${
                   active === link.id ? "font-bold text-primary" : ""
                 }`}
               >
                 {link.label}
               </a>
             ))}
-            <div className="flex gap-4 mt-4">
-              <button className="px-6 py-2 cursor-pointer bg-primary text-white rounded-full text-sm font-bold hover:bg-secondary transition">
-                S'inscrire
-              </button>
-              <button className="px-6 py-2 bg-accent text-secondary rounded-full text-sm font-bold hover:bg-primary hover:text-white transition cursor-pointer">
-                Se connecter
-              </button>
+            <div className="flex gap-3 mt-2">
+              <Link to="/auth?type=signup">
+                <button className="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-bold hover:bg-secondary transition cursor-pointer">
+                  S'inscrire
+                </button>
+              </Link>
+              <Link to="/auth?type=login">
+                <button className="px-4 py-1.5 bg-accent text-secondary rounded-full text-sm font-bold hover:bg-primary hover:text-white transition cursor-pointer">
+                  Se connecter
+                </button>
+              </Link>
             </div>
           </motion.div>
         )}
@@ -173,7 +196,7 @@ export default function Landing() {
       >
         <div className="relative z-10 flex-1 max-w-4xl">
           <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold font-righteous mb-4 text-secondary leading-tight md:leading-[1.1]">
-            IatroSense Ai
+            IATROSENSE AI
           </h2>
           <p className="text-2xl sm:text-3xl md:text-4xl text-primary font-extrabold font-manrope mb-6 leading-snug">
             Votre compagnon d'apprentissage médical
@@ -185,10 +208,12 @@ export default function Landing() {
               d'être.
             </p>
           </div>
-          <button className="my-10 md:my-20 flex items-center gap-4 md:gap-6 px-10 md:px-20 py-3 font-manrope font-semibold bg-primary text-white rounded-full shadow-md hover:bg-secondary transition cursor-pointer">
-            <span className="text-base md:text-xl">Essayer IatroSense</span>
-            <span className="text-2xl md:text-4xl">→</span>
-          </button>
+          <Link to="/auth?type=signup">
+            <button className="my-10 md:my-20 flex items-center gap-4 md:gap-6 px-10 md:px-20 py-3 font-manrope font-semibold bg-primary text-white rounded-full shadow-md hover:bg-secondary transition cursor-pointer">
+              <span className="text-base md:text-xl">Essayer IatroSense</span>
+              <span className="text-2xl md:text-4xl">→</span>
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -234,25 +259,24 @@ export default function Landing() {
                 <img
                   src="/why-ba.jpg"
                   alt="Medical Professionals"
-                  className="w-80 md:w-96 lg:w-[26rem] h-52 md:h-64 lg:h-80 object-cover rounded-4xl"
+                  className="w-64 sm:w-80 md:w-96 lg:w-[26rem] h-40 sm:h-52 md:h-64 lg:h-80 object-cover rounded-3xl sm:rounded-4xl"
                 />
                 <img
                   src="/why-fr.jpg"
                   alt="Laptop with Medical Graphics"
-                  className="absolute -right-12 bottom-0 w-2/3 md:w-3/4 h-36 md:h-52 lg:h-64 object-cover rounded-4xl  z-10"
+                  className="absolute -right-6 sm:-right-8 md:-right-12 bottom-0 w-1/2 sm:w-2/3 md:w-3/4 h-28 sm:h-36 md:h-52 lg:h-64 object-cover rounded-3xl sm:rounded-4xl z-10"
                 />
-                <div className="absolute -left-12 -bottom-6 bg-[#CAF0F8] rounded-3xl p-3 sm:p-4 md:p-5 z-10 w-44 md:w-56 lg:w-64 h-40">
-                  <div className="text-3xl md:text-4xl lg:text-5xl font-bold font-manrope text-primary">
+                <div className="absolute -left-6 sm:-left-8 md:-left-12 -bottom-4 sm:-bottom-6 bg-[#CAF0F8] rounded-2xl sm:rounded-3xl p-2 sm:p-3 md:p-4 lg:p-5 z-10 w-32 sm:w-40 md:w-48 lg:w-56 h-28 sm:h-32 md:h-36 lg:h-40">
+                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-manrope text-primary">
                     +80%
                   </div>
-                  <p className="text-sx md:text-sm lg:text-xl font-bold font-manrope text-primary mt-4">
+                  <p className="text-xs sm:text-sx md:text-sm lg:text-base xl:text-xl font-bold font-manrope text-primary mt-2 sm:mt-3 md:mt-4">
                     de temps gagné sur tes révisions
                   </p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col gap-12">
-              {/* 02 */}
               <div className="space-y-4">
                 <h3 className="text-4xl md:text-5xl font-bold font-manrope text-primary">
                   02 .
@@ -265,7 +289,7 @@ export default function Landing() {
                   médecine.
                 </p>
               </div>
-              {/* 04 */}
+
               <div className="space-y-4">
                 <h3 className="text-4xl md:text-5xl font-bold font-manrope text-primary">
                   04 .
@@ -282,7 +306,6 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
 
       <div className="h-0.5 w-11/12 mx-auto bg-gradient-to-r from-transparent via-[#005683] via-[#24789E] via-[#489BB9] via-[#24789E] via-[#005683] to-transparent my-6"></div>
 
@@ -302,10 +325,12 @@ export default function Landing() {
             (flashcards, quiz, cas cliniques) et un suivi personnalisé, pour
             vous rapprocher chaque jour du médecin que vous rêvez de devenir.
           </p>
-          <button className="my-10 md:my-20 flex items-center gap-4 md:gap-6 px-10 md:px-20 py-3 font-manrope font-semibold bg-primary text-white rounded-full shadow-md hover:bg-secondary transition cursor-pointer">
-            <span className="text-base md:text-xl">Essayer IatroSense</span>
-            <span className="text-2xl md:text-4xl">→</span>
-          </button>
+          <Link to="/auth?type=signup">
+            <button className="my-10 md:my-20 flex items-center gap-4 md:gap-6 px-10 md:px-20 py-3 font-manrope font-semibold bg-primary text-white rounded-full shadow-md hover:bg-secondary transition cursor-pointer">
+              <span className="text-base md:text-xl">Essayer IatroSense</span>
+              <span className="text-2xl md:text-4xl">→</span>
+            </button>
+          </Link>
         </div>
         <div className="flex-1 flex justify-center md:justify-end mt-8 md:mt-0">
           <img
@@ -394,7 +419,6 @@ export default function Landing() {
               key={i}
               className="bg-[#CEF7FF] rounded-2xl md:rounded-[30px] p-4 md:p-6 pt-12 md:pt-14 shadow-[0_4px_34px_5px_rgba(0,30,46,0.08)] hover:shadow-[0_6px_40px_8px_rgba(0,30,46,0.12)] transition-all duration-300 h-full flex flex-col relative min-h-64 md:min-h-72"
             >
-              {/* Icon positioned on top border */}
               <div className="absolute -top-8 md:-top-6 left-1/2 transform -translate-x-1/2 w-20 h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 bg-white rounded-xl flex items-center justify-center shadow-lg">
                 {service.icon}
               </div>
@@ -415,92 +439,109 @@ export default function Landing() {
         id="contact"
         className="py-16 md:py-20 px-4 md:px-16 font-manrope"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12  mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mx-auto">
           <div className="space-y-6">
-            <h2 className="text-3xl md:text-7xl font-bold text-[#4A7FA7] ">
-              Besoin d’aide ?
+            <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-[#4A7FA7]">
+              Besoin d'aide ?
             </h2>
-            <p className="text-2xl text-black max-w-xl">
-              Si vous avez des questions n’hésitez pas à nous contacter, notre
+            <p className="text-lg md:text-xl lg:text-2xl text-black max-w-xl">
+              Si vous avez des questions n'hésitez pas à nous contacter, notre
               équipe est dans votre service !
             </p>
 
             <div className="flex items-center gap-4 text-black">
-              <img src={Phone} alt="Phone" />
-              <span className="text-2xl font-medium">+213 5566778899</span>
+              <img src={Phone} alt="Phone" className="w-6 h-6 md:w-8 md:h-8" />
+              <span className="text-lg md:text-xl lg:text-2xl font-medium">
+                +213 5566778899
+              </span>
             </div>
             <div className="flex items-center gap-4 text-black">
-              <img src={Mail} alt="Mail" />
-              <span className="text-2xl font-medium">
+              <img src={Mail} alt="Mail" className="w-6 h-6 md:w-8 md:h-8" />
+              <span className="text-lg md:text-xl lg:text-2xl font-medium">
                 contact@iatrosense.ai
               </span>
             </div>
             <div className="flex items-center gap-4 text-black">
-              <img src={Facebookcontact} alt="Facebook" />
-              <span className="text-2xl font-medium underline">
+              <img
+                src={Facebookcontact}
+                alt="Facebook"
+                className="w-6 h-6 md:w-8 md:h-8"
+              />
+              <span className="text-lg md:text-xl lg:text-2xl font-medium underline">
                 IatroSense Ai
               </span>
             </div>
             <div className="flex items-center gap-4 text-black">
-              <img src={LinkedIncontact} alt="PhoneLinkedIn" />
-              <span className="text-2xl font-medium underline">
+              <img
+                src={LinkedIncontact}
+                alt="LinkedIn"
+                className="w-6 h-6 md:w-8 md:h-8"
+              />
+              <span className="text-lg md:text-xl lg:text-2xl font-medium underline">
                 IatroSense Ai
               </span>
             </div>
           </div>
-          <form className="p-6 md:p-8 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          <form className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               <div className="space-y-2">
-                <h1 className="font-medium text-gray-700 pl-4">Nom</h1>
+                <h1 className="font-medium text-gray-700 pl-4 text-sm md:text-base">
+                  Nom
+                </h1>
                 <input
                   type="text"
                   placeholder="Entrez votre nom"
-                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED]"
+                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED] text-sm md:text-base"
                 />
               </div>
               <div className="space-y-2">
-                <h1 className="font-medium text-gray-700 pl-4">Email</h1>
+                <h1 className="font-medium text-gray-700 pl-4 text-sm md:text-base">
+                  Email
+                </h1>
                 <input
                   type="text"
                   placeholder="Entrez votre email"
-                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED]"
+                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED] text-sm md:text-base"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               <div className="space-y-2">
-                <h1 className="font-medium text-gray-700 pl-4">
+                <h1 className="font-medium text-gray-700 pl-4 text-sm md:text-base">
                   Numéro de téléphone
                 </h1>
                 <input
                   type="text"
                   placeholder="Entrez votre numéro de téléphone"
-                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED]"
+                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED] text-sm md:text-base"
                 />
               </div>
               <div className="space-y-2">
-                <h1 className="font-medium text-gray-700 pl-4">Sujet</h1>
+                <h1 className="font-medium text-gray-700 pl-4 text-sm md:text-base">
+                  Sujet
+                </h1>
                 <input
                   type="text"
-                  placeholder="C’est quoi le sujet du message"
-                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED]"
+                  placeholder="C'est quoi le sujet du message"
+                  className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED] text-sm md:text-base"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <h1 className="font-medium text-gray-700 pl-4">
-                C’est quoi ton message ?
+              <h1 className="font-medium text-gray-700 pl-4 text-sm md:text-base">
+                C'est quoi ton message ?
               </h1>
               <textarea
                 placeholder="Entrez votre message"
-                className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full h-32 placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED]"
+                className="px-4 py-3 bg-white border-2 border-[#EBEBEB] rounded-[30px] w-full h-32 placeholder-[#EBEBEB] focus:outline-none focus:ring-2 focus:ring-[#2F6FED] text-sm md:text-base"
               ></textarea>
             </div>
 
             <div className="flex justify-center">
-              <button className="mt-10 flex items-center gap-4 md:gap-6 px-10 md:px-20 py-3 font-manrope font-semibold bg-primary text-base md:text-xl text-white rounded-full shadow-md hover:bg-secondary transition cursor-pointer">
+              <button className="mt-6 md:mt-10 flex items-center gap-4 md:gap-6 px-8 md:px-16 lg:px-20 py-2 md:py-3 font-manrope font-semibold bg-primary text-sm md:text-base lg:text-xl text-white rounded-full shadow-md hover:bg-secondary transition cursor-pointer">
                 Envoyer le message
               </button>
             </div>
@@ -530,7 +571,7 @@ export default function Landing() {
                   placeholder="Enter your email address"
                   className="px-4 py-3 w-full bg-white focus:outline-none text-[#1B2B57] placeholder-[#B0B0B0]"
                 />
-                <button className="px-6 py-3 bg-[#CAF0F8] text-[#1B2B57] font-semibold hover:opacity-90 transition">
+                <button className="px-6 py-3 bg-[#CAF0F8] text-[#1B2B57] font-semibold hover:opacity-90 transition cursor-pointer">
                   Subscribe
                 </button>
               </div>
