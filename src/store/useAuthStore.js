@@ -7,6 +7,7 @@ export const useAuthStore = create((set, get) => ({
   isSigningUp: false,
   isLoggingIn: false,
   isCheckingAuth: true,
+  needsProfileCompletion: false,
 
   checkAuth: async () => {
     try {
@@ -54,10 +55,55 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
+  googleAuth: async (credential) => {
+    try {
+      const res = await axiosInstance.post("/auth/google", { credential });
+      set({
+        authUser: res.data,
+        needsProfileCompletion: res.data.needsProfileCompletion || false,
+      });
+
+      if (res.data.needsProfileCompletion) {
+        toast.success("Connecté avec Google. Veuillez compléter votre profil.");
+      } else {
+        toast.success("Connecté avec succès");
+      }
+
+      return {
+        success: true,
+        needsProfileCompletion: res.data.needsProfileCompletion || false,
+      };
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Erreur lors de la connexion avec Google";
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  },
+
+  completeGoogleProfile: async (data) => {
+    try {
+      const res = await axiosInstance.post("/auth/google/complete", data);
+      set({
+        authUser: res.data,
+        needsProfileCompletion: false,
+      });
+      toast.success("Profil complété avec succès");
+      return { success: true };
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Erreur lors de la mise à jour du profil";
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  },
+
   logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
-      set({ authUser: null });
+      set({ authUser: null, needsProfileCompletion: false });
       toast.success("Déconnecté avec succès");
     } catch (error) {
       const errorMessage =

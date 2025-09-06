@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaUser,
   FaEnvelope,
@@ -25,7 +25,7 @@ export default function Signup({ switchToLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { signup, isSigningUp } = useAuthStore();
+  const { signup, isSigningUp, googleAuth } = useAuthStore();
 
   const steps = ["Etape 1", "Etape 2", "Etape 03"];
 
@@ -54,6 +54,51 @@ export default function Signup({ switchToLogin }) {
 
   // Years data matching backend enum
   const years = ["1", "2", "3", "4", "5", "6", "7"];
+
+  useEffect(() => {
+    // Load Google API script
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = initializeGoogleSignIn;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const initializeGoogleSignIn = () => {
+    if (window.google) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.GOOGLE_CLIENT_ID,
+        callback: handleGoogleSignIn,
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById("googleSignInButton"),
+        {
+          theme: "outline",
+          size: "large",
+          width: 300,
+          text: "signup_with",
+          shape: "pill",
+        }
+      );
+    }
+  };
+
+  const handleGoogleSignIn = async (response) => {
+    try {
+      const result = await googleAuth(response.credential);
+      if (result.success) {
+        toast.success("Connecté avec Google");
+      }
+    } catch (error) {
+      toast.error("Erreur lors de la connexion avec Google");
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -452,21 +497,9 @@ export default function Signup({ switchToLogin }) {
             </span>
             <div className="flex-1 h-px bg-gray-300"></div>
           </div>
-          <div className="flex space-x-4 mt-4">
-            <button className="border rounded-full p-3 hover:bg-gray-100 transition-colors">
-              <img
-                src="Google.svg"
-                alt="google"
-                className="w-6 h-6 cursor-pointer"
-              />
-            </button>
-            <button className="border rounded-full p-3 hover:bg-gray-100 transition-colors">
-              <img
-                src="Facebook.svg"
-                alt="facebook"
-                className="w-6 h-6 cursor-pointer"
-              />
-            </button>
+
+          <div className="flex justify-center mt-4 w-full">
+            <div id="googleSignInButton"></div>
           </div>
 
           <p className="mt-8 text-sm text-[#031B28] text-center">
