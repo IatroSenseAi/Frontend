@@ -5,7 +5,6 @@ const useGoogleLogin = () => {
   const { googleAuth } = useAuthStore();
 
   useEffect(() => {
-    // Load Google API script
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;

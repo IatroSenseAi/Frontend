@@ -1,17 +1,16 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import CompleteProfile from "./components/CompleteProfile";
-
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
-
 import { Loader } from "lucide-react";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth, needsProfileCompletion } =
     useAuthStore();
+  const location = useLocation();
 
   useEffect(() => {
     checkAuth();
@@ -24,7 +23,7 @@ function App() {
       </div>
     );
 
-  // If user is authenticated but needs to complete profile
+  // If user needs to complete profile, show that component regardless of route
   if (authUser && needsProfileCompletion) {
     return <CompleteProfile />;
   }
@@ -34,16 +33,17 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={!authUser ? <Landing /> : <Navigate to="/home" />}
+          element={!authUser ? <Landing /> : <Navigate to="/home" replace />}
         />
         <Route
           path="/auth"
-          element={!authUser ? <Auth /> : <Navigate to="/home" />}
+          element={!authUser ? <Auth /> : <Navigate to="/home" replace />}
         />
         <Route
           path="/home"
-          element={authUser ? <Home /> : <Navigate to="/auth" />}
+          element={authUser ? <Home /> : <Navigate to="/auth" replace />}
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
