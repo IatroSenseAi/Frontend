@@ -107,12 +107,12 @@ export const useAuthStore = create((set, get) => ({
   logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
+    } catch (error) {
+      console.log("Logout API error (proceeding anyway):", error.message);
+    } finally {
       set({ authUser: null, needsProfileCompletion: false });
       toast.success("Déconnecté avec succès");
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Erreur lors de la déconnexion";
-      toast.error(errorMessage);
+      document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
   },
 }));
