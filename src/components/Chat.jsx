@@ -31,7 +31,7 @@ function Chat() {
 
       {/* Desktop Sidebar (collapsed state) */}
       <div
-        className="hidden md:flex flex-col fixed top-0 right-0 h-screen w-20 bg-white z-40 rounded-l-3xl p-4"
+        className="hidden md:flex flex-col fixed top-0 right-0 h-screen w-20 font-manrope bg-white z-40 rounded-l-3xl p-4"
         style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
       >
         {/* Logo at Top */}
@@ -64,13 +64,12 @@ function Chat() {
 
       {/* Mobile Closed State */}
       {!isOpen && (
-        <div className="md:hidden fixed top-4 right-4 z-40">
+        <div className="md:hidden fixed mt-5 right-4  font-manrope z-40">
           <button onClick={() => setIsOpen(true)}>
             <img
               src="chat-icn.svg"
               alt="open"
-              className="w-12 h-12"
-              style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
+              className="w-8 h-8"
             />
           </button>
         </div>
@@ -79,7 +78,7 @@ function Chat() {
       {/* Opened Sidebar (desktop + mobile) */}
       <div
         ref={sidebarRef}
-        className={`fixed top-0 right-0 h-screen md:h-screen w-96 bg-white z-50 transform transition-transform duration-300 rounded-l-3xl
+        className={`fixed top-0 right-0 font-manrope h-screen md:h-screen w-96 bg-white z-50 transform transition-transform duration-300 rounded-l-3xl
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
         style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
       >
@@ -100,9 +99,7 @@ function Chat() {
                 >
                   <FiX size={26} />
                 </button>
-                <h1 className="text-2xl text-secondary ">
-                  IatroSense Ai
-                </h1>
+                <h1 className="text-2xl text-secondary ">IatroSense Ai</h1>
               </div>
 
               {/* Right: chat-icn for both desktop + mobile */}
