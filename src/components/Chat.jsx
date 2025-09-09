@@ -1,122 +1,172 @@
-import React, { useState } from "react";
-import { FiMessageSquare, FiSend, FiX } from "react-icons/fi";
+import React, { useState, useRef, useEffect } from "react";
+import { FiPlus, FiArrowUp, FiX } from "react-icons/fi";
 
 function Chat() {
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const sidebarRef = useRef(null);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (message.trim()) {
-      console.log("Sending message:", message);
-      setMessage("");
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
     }
-  };
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <>
-      {/* Mobile Toggle Button (only visible on mobile when closed) */}
-      {!isOpen && (
-        <button
-          onClick={toggleSidebar}
-          className="md:hidden fixed top-4 right-4 z-50 p-3 bg-[#4A3AFF] text-white rounded-full shadow-lg hover:bg-[#3A2AEE] transition-colors"
-        >
-          <FiMessageSquare className="w-5 h-5" />
-        </button>
-      )}
+      {/* Overlay (mobile only when opened) */}
+      {isOpen && <div className="fixed inset-0 bg-black/40 z-30 md:hidden" />}
 
-      {/* Desktop Floating Button (only visible when closed) */}
-      {!isOpen && (
-        <button
-          onClick={toggleSidebar}
-          className="hidden md:flex fixed top-1/2 right-4 z-50 p-3 bg-[#4A3AFF] text-white rounded-full shadow-lg hover:bg-[#3A2AEE] transition-colors transform -translate-y-1/2"
-        >
-          <FiMessageSquare className="w-6 h-6" />
-        </button>
-      )}
-
-      {/* Overlay - No blur */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 z-30 md:bg-transparent"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Sidebar - Full height in both open and closed states */}
+      {/* Desktop Sidebar (collapsed state) */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white z-40 shadow-lg transform transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className="hidden md:flex flex-col fixed top-0 right-0 h-screen w-20 bg-white z-40 rounded-l-3xl p-4"
+        style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
       >
-        {/* Header */}
-        <div className="p-4 bg-[#4A3AFF] text-white flex items-center justify-between h-16">
-          <h2 className="text-lg font-semibold">IATROSENSE AI</h2>
+        {/* Logo at Top */}
+        <div className="flex flex-col items-center mt-4 w-full">
+          <img src="bot.svg" alt="Logo" className="w-10 h-10" />
+
+          {/* Gradient line */}
+          <div
+            className="w-full h-[2px] mt-4 rounded-full"
+            style={{
+              background:
+                "linear-gradient(90deg, #FFFFFF 0%, #005683 20%, #0077B6 50%, #003D5D 80%, #003F4500 100%)",
+            }}
+          />
+        </div>
+
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Open Button at Bottom */}
+        <div className="flex justify-center mb-4">
           <button
-            onClick={() => setIsOpen(false)}
-            className="p-1 hover:bg-[#3A2AEE] rounded transition-colors"
+            onClick={() => setIsOpen(true)}
+            className="w-12 h-12 flex items-center justify-center bg-[#4A3AFF] text-white rounded-full hover:bg-[#3A2AEE] transition-colors"
           >
-            <FiX className="w-5 h-5" />
+            <img src="chat-open.svg" alt="open" className="w-6 h-6" />
           </button>
         </div>
+      </div>
 
-        {/* Content */}
-        <div className="p-4 h-[calc(100%-4rem)] flex flex-col">
-          {/* Welcome Message */}
-          <div className="mb-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Bonjour !</h3>
-            <p className="text-gray-600">
-              Commencer à discuter avec IATROSENSE AI
-            </p>
-          </div>
+      {/* Mobile Closed State */}
+      {!isOpen && (
+        <div className="md:hidden fixed top-4 right-4 z-40">
+          <button onClick={() => setIsOpen(true)}>
+            <img
+              src="chat-icn.svg"
+              alt="open"
+              className="w-12 h-12"
+              style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
+            />
+          </button>
+        </div>
+      )}
 
-          <div className="flex-1 overflow-y-auto">
-            {/* Internet Status */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-gray-700">
-                  INTERNET
-                </span>
+      {/* Opened Sidebar (desktop + mobile) */}
+      <div
+        ref={sidebarRef}
+        className={`fixed top-0 right-0 h-screen md:h-screen w-96 bg-white z-50 transform transition-transform duration-300 rounded-l-3xl
+        ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+        style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
+      >
+        {isOpen && (
+          <div className="flex flex-col h-full p-4">
+            {/* Header */}
+            <div className="flex justify-between items-center p-4">
+              {/* Left: Bot on desktop / X on mobile */}
+              <div className="flex items-center space-x-2">
+                <img
+                  src="bot.svg"
+                  alt="Bot"
+                  className="w-10 h-10 hidden md:block"
+                />
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="md:hidden text-secondary hover:text-gray-900"
+                >
+                  <FiX size={26} />
+                </button>
+                <h1 className="text-2xl text-secondary ">
+                  IatroSense Ai
+                </h1>
               </div>
-              <div className="bg-gray-100 rounded-lg p-3">
-                <p className="text-sm text-gray-600">
-                  Power Line questions à IATROSENSE AI...
-                </p>
-              </div>
-            </div>
 
-            {/* Chat Messages Area */}
-            <div className="space-y-3">
-              <div className="text-center text-sm text-gray-500">
-                Aucun message pour le moment
-              </div>
-            </div>
-          </div>
-
-          {/* Message Input */}
-          <form onSubmit={handleSendMessage} className="mt-4">
-            <div className="flex items-center border border-gray-300 rounded-lg p-2">
-              <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Tapez votre message..."
-                className="flex-1 bg-transparent border-none outline-none text-sm"
-              />
-              <button
-                type="submit"
-                disabled={!message.trim()}
-                className="p-2 text-[#4A3AFF] hover:text-[#3A2AEE] disabled:text-gray-400"
-              >
-                <FiSend className="w-5 h-5" />
+              {/* Right: chat-icn for both desktop + mobile */}
+              <button onClick={() => setIsOpen(false)}>
+                <img
+                  src="chat-icn.svg"
+                  alt="close"
+                  className="w-8 h-8 cursor-pointer"
+                />
               </button>
             </div>
-          </form>
-        </div>
+
+            {/* Gradient line under header */}
+            <div
+              className="w-full h-[2px] mb-4 rounded-full"
+              style={{
+                background:
+                  "linear-gradient(90deg, #FFFFFF 0%, #005683 20%, #0077B6 50%, #003D5D 80%, #003F4500 100%)",
+              }}
+            />
+
+            {/* Messages area (scrollable) */}
+            <div className="flex-1 overflow-y-auto px-4 py-2">
+              {/* Future chat messages */}
+            </div>
+
+            {/* Greeting Section ABOVE the message bar */}
+            <div className="px-4 text-center mb-2">
+              <h2 className="text-3xl font-bold mb-2 text-secondary">
+                Bonjour
+              </h2>
+              <p className=" text-lg text-secondary">
+                Commencer à discuter avec IatroSense Ai
+              </p>
+              <img
+                src="chat-img.svg"
+                alt="Chat Illustration"
+                className="w-64 h-64 mx-auto my-2"
+              />
+            </div>
+
+            {/* Message Input Bar */}
+            <div className="p-4">
+              <div className="flex items-center border-2 border-secondary rounded-full px-3 py-2 ">
+                {/* Plus icon */}
+                <button className="text-secondary hover:text-gray-700">
+                  <FiPlus size={22} />
+                </button>
+
+                {/* Input */}
+                <input
+                  type="text"
+                  placeholder="Écrire un message..."
+                  className="flex-1 bg-transparent px-2 outline-none text-sm"
+                />
+
+                {/* Send button */}
+                <button className="ml-2 bg-secondary text-white rounded-full p-2 hover:bg-[#3A2AEE] transition-colors">
+                  <FiArrowUp size={18} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
