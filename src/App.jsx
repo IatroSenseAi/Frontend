@@ -44,7 +44,7 @@ function App() {
           element={!authUser ? <Auth /> : <Navigate to="/cours" replace />}
         />
         <Route
-          path="/cours"
+          path="/cours/*"
           element={authUser ? <Cours /> : <Navigate to="/auth" replace />}
         />
         <Route

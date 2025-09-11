@@ -15,36 +15,36 @@ function Sidebar() {
     {
       id: "cours",
       label: "Cours",
-      icon: "cours-active.svg",
-      inactiveIcon: "cours.svg",
+      icon: "/cours-active.svg",
+      inactiveIcon: "/cours.svg",
       path: "/cours",
     },
     {
       id: "flashcards",
       label: "Flashcards",
-      icon: "flashcards-active.svg",
-      inactiveIcon: "flashcards.svg",
+      icon: "/flashcards-active.svg",
+      inactiveIcon: "/flashcards.svg",
       path: "/flashcards",
     },
     {
       id: "quizz",
       label: "Quizz",
-      icon: "quizz-active.svg",
-      inactiveIcon: "quizz.svg",
+      icon: "/quizz-active.svg",
+      inactiveIcon: "/quizz.svg",
       path: "/quizz",
     },
     {
       id: "qcms",
       label: "QCMs",
-      icon: "qcms-active.svg",
-      inactiveIcon: "qcms.svg",
+      icon: "/qcms-active.svg",
+      inactiveIcon: "/qcms.svg",
       path: "/qcms",
     },
     {
       id: "cas-cliniques",
       label: "Cas cliniques",
-      icon: "cas-clinique-active.svg",
-      inactiveIcon: "cas-clinique.svg",
+      icon: "/cas-clinique-active.svg",
+      inactiveIcon: "/cas-clinique.svg",
       path: "/cas-cliniques",
     },
   ];
@@ -53,15 +53,15 @@ function Sidebar() {
     {
       id: "compte",
       label: "Mon compte",
-      icon: "compte-active.svg",
-      inactiveIcon: "compte.svg",
+      icon: "/compte-active.svg",
+      inactiveIcon: "/compte.svg",
       path: "/mon-compte",
     },
     {
       id: "deconnecter",
       label: "Se déconnecter",
-      icon: "logout-active.svg",
-      inactiveIcon: "logout.svg",
+      icon: "/logout-active.svg",
+      inactiveIcon: "/logout.svg",
       action: logout,
     },
   ];
@@ -74,7 +74,8 @@ function Sidebar() {
     }
   };
 
-  const isActive = (path) => location.pathname === path;
+  // Fixed isActive function to check if the current path starts with the item path
+  const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <>
@@ -101,7 +102,7 @@ function Sidebar() {
         <div className="absolute top-1/2 p-4 transform -translate-y-1/2 z-10">
           <div className="w-12 h-20 flex items-center ">
             <img
-              src="opened.svg"
+              src="/opened.svg"
               alt="Toggle sidebar"
               className={`w-7 h-14 2xl:w-8 2xl:h-16 transition-transform duration-300 ${
                 isHovered ? "rotate-0" : "rotate-180"
@@ -116,7 +117,7 @@ function Sidebar() {
           }`}
         >
           <img
-            src="Logo.svg"
+            src="/Logo.svg"
             alt="Logo"
             className="w-[clamp(1.5rem,1.8vw,2rem)] h-[clamp(1.5rem,1.8vw,2rem)] 2xl:w-[clamp(1.8rem,2vw,2.5rem)] 2xl:h-[clamp(1.8rem,2vw,2.5rem)]"
           />
@@ -207,7 +208,7 @@ function Sidebar() {
         ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="p-5 flex items-center">
-          <img src="Logo.svg" alt="Logo" className="w-10 h-10 mr-2" />
+          <img src="/Logo.svg" alt="Logo" className="w-10 h-10 mr-2" />
           <h1 className="text-xl font-bold font-righteous text-secondary">
             IATROSENSE <span className="text-primary">AI</span>
           </h1>

@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@400;600;700&display=swap");
 
+@import "react-pdf/dist/Page/TextLayer.css";
+@import "react-pdf/dist/Page/AnnotationLayer.css";
+
 @import "tailwindcss";
 
 @theme {
@@ -10,7 +13,158 @@
   --color-subhead: #021e2d;
   --color-noactive: #aec6d3;
   --color-cards: #cfeeff;
+  --color-module: #a8dcf8;
 
   --font-righteous: "Righteous", cursive;
   --font-manrope: "Manrope", sans-serif;
+}
+
+.specialty-card {
+  --image-size-sm: 80px;
+  --image-size-md: 100px;
+  --image-size-lg: 120px;
+  --image-size-xl: 140px;
+}
+
+@media (min-width: 768px) {
+  .specialty-card {
+    --image-size-sm: 90px;
+    --image-size-md: 110px;
+    --image-size-lg: 130px;
+    --image-size-xl: 150px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .specialty-card {
+    --image-size-sm: 100px;
+    --image-size-md: 120px;
+    --image-size-lg: 140px;
+    --image-size-xl: 160px;
+  }
+}
+
+/* For screens 1300px and above */
+@media (min-width: 1300px) {
+  .specialty-card {
+    --image-size-sm: 120px;
+    --image-size-md: 150px;
+    --image-size-lg: 180px;
+    --image-size-xl: 210px;
+  }
+
+  .specialty-card {
+    padding: 1.25rem !important;
+  }
+
+  .specialty-title {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+
+  .specialty-courses {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .specialty-card {
+    --image-size-sm: 140px;
+    --image-size-md: 180px;
+    --image-size-lg: 220px;
+    --image-size-xl: 260px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .specialty-card {
+    --image-size-sm: 160px;
+    --image-size-md: 200px;
+    --image-size-lg: 240px;
+    --image-size-xl: 280px;
+  }
+}
+
+.specialty-image {
+  width: auto;
+  height: auto;
+  max-width: var(--image-size-md);
+  max-height: var(--image-size-md);
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.specialty-card:hover .specialty-image {
+  transform: scale(1.05);
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--image-size-md);
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+/* Recent courses responsive styles */
+.recent-courses-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .recent-courses-container {
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .recent-courses-container {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1300px) {
+  .recent-courses-container {
+    gap: 1.25rem;
+  }
+
+  .course-item {
+    padding: 1rem 1.25rem !important;
+  }
+
+  .course-name {
+    font-size: 1rem !important;
+  }
+
+  .course-date {
+    font-size: 0.9rem !important;
+  }
+
+  .course-progress {
+    font-size: 0.9rem !important;
+  }
+
+  .course-icon {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .recent-courses-container {
+    gap: 1.5rem;
+  }
+
+  .course-item {
+    padding: 1.25rem 1.5rem !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .recent-courses-container {
+    gap: 1.75rem;
+  }
 }
