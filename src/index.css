@@ -14,6 +14,7 @@
   --color-noactive: #aec6d3;
   --color-cards: #cfeeff;
   --color-module: #a8dcf8;
+  --color-toolbar: #132436;
 
   --font-righteous: "Righteous", cursive;
   --font-manrope: "Manrope", sans-serif;
@@ -168,3 +169,5 @@
     gap: 1.75rem;
   }
 }
+
+
