@@ -31,12 +31,12 @@ function Chat() {
         className="hidden md:flex flex-col fixed top-0 right-0 h-screen 
         w-[clamp(3.5rem,4vw,5rem)] 2xl:w-[clamp(4rem,4.5vw,6rem)]
         font-manrope bg-white z-40 rounded-l-3xl 
-        p-[clamp(0.4rem,0.7vw,1rem)]"
+        p-[clamp(0.4rem,0.7vw,1rem)] "
         style={{ boxShadow: "0px 4px 20px 2px rgba(0, 0, 0, 0.15)" }}
       >
         <div className="flex flex-col items-center mt-[clamp(0.5rem,1vw,1.5rem)] w-full">
           <img
-            src="bot.svg"
+            src="/bot.svg"
             alt="Logo"
             className="w-[clamp(1.5rem,1.8vw,2.2rem)] h-[clamp(1.5rem,1.8vw,2.2rem)]"
           />
@@ -59,7 +59,7 @@ function Chat() {
             hover:bg-[#3A2AEE] transition-colors cursor-pointer"
           >
             <img
-              src="chat-open.svg"
+              src="/chat-open.svg"
               alt="open"
               className="w-[clamp(1rem,1.3vw,1.5rem)] h-[clamp(1rem,1.3vw,1.5rem)]"
             />
@@ -70,7 +70,7 @@ function Chat() {
       {!isOpen && (
         <div className="md:hidden fixed mt-5 right-4 font-manrope z-40">
           <button onClick={() => setIsOpen(true)}>
-            <img src="chat-icn.svg" alt="open" className="w-8 h-8" />
+            <img src="/chat-icn.svg" alt="open" className="w-8 h-8" />
           </button>
         </div>
       )}
@@ -88,7 +88,7 @@ function Chat() {
             <div className="flex justify-between items-center p-[clamp(0.4rem,0.8vw,1rem)]">
               <div className="flex items-center space-x-[clamp(0.3rem,0.6vw,0.8rem)]">
                 <img
-                  src="bot.svg"
+                  src="/bot.svg"
                   alt="Bot"
                   className="hidden md:block w-[clamp(1.2rem,1.6vw,2rem)] h-[clamp(1.2rem,1.6vw,2rem)]"
                 />
@@ -105,7 +105,7 @@ function Chat() {
 
               <button onClick={() => setIsOpen(false)}>
                 <img
-                  src="chat-icn.svg"
+                  src="/chat-icn.svg"
                   alt="close"
                   className="w-[clamp(1.2rem,1.5vw,1.8rem)] h-[clamp(1.2rem,1.5vw,1.8rem)] cursor-pointer"
                 />
@@ -132,7 +132,7 @@ function Chat() {
                 Commencer à discuter avec IatroSense Ai
               </p>
               <img
-                src="chat-img.svg"
+                src="/chat-img.svg"
                 alt="Chat Illustration"
                 className="w-[clamp(8rem,12vw,14rem)] h-auto mx-auto my-2"
               />

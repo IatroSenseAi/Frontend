@@ -89,7 +89,7 @@ function Sidebar() {
       )}
 
       <div
-        className={`bg-white font-manrope h-screen py-6 fixed left-0 top-0 overflow-hidden transition-all duration-300 z-40 shadow-[0_4px_20px_2px_rgba(0,0,0,0.15)]
+        className={`bg-white font-manrope h-screen py-4 fixed left-0 top-0 overflow-hidden transition-all duration-300 z-40 shadow-[0_4px_20px_2px_rgba(0,0,0,0.15)]
           ${
             isHovered
               ? "w-[clamp(14rem,15vw,18rem)] 2xl:w-[clamp(16rem,18vw,20rem)]"

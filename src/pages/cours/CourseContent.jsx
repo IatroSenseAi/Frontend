@@ -30,6 +30,7 @@ function CourseContent() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [maxScale, setMaxScale] = useState(3);
+  const [pageDimensions, setPageDimensions] = useState({});
 
   const viewerRef = useRef(null);
   const scrollRef = useRef(null);
@@ -43,12 +44,22 @@ function CourseContent() {
     setVisiblePages([1, numPages >= 2 ? 2 : 1]);
   };
 
+  const onPageLoadSuccess = (page) => {
+    setPageDimensions((prev) => ({
+      ...prev,
+      [page.pageNumber]: {
+        width: page.width,
+        height: page.height,
+      },
+    }));
+  };
+
   useEffect(() => {
     const updateContainerWidth = () => {
       if (containerRef.current) {
         const width = containerRef.current.clientWidth;
         setContainerWidth(width);
-        setMaxScale(width < 768 ? 4 : 3); // mobile allows more zoom
+        setMaxScale(width < 768 ? 4 : 3);
       }
     };
 
@@ -153,31 +164,59 @@ function CourseContent() {
     };
   }, []);
 
+  // Progress calculation
+  const progress = numPages ? Math.round((pageNumber / numPages) * 100) : 0;
+
   return (
-    <>
+    <div className="font-manrope">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-5">
+      <div className="flex items-center gap-1 mb-2 2xl:mx-6">
         <Link
           to={`/cours/${specialty}/${module}`}
           className="flex items-center text-secondary hover:underline"
         >
-          <ArrowLeft className="w-5 h-5 mr-1" />
+          <ArrowLeft className="w-4 h-4 2xl:w-8 2xl:h-8 mr-1" />
         </Link>
-        <h2 className="text-xl font-semibold text-secondary capitalize">
+        <h2 className="text-sm md:text-base 2xl:text-3xl  text-secondary capitalize">
           {course.replace(/-/g, " ")}
         </h2>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mb-3 2xl:mx-6">
+        <div className="flex justify-between text-xs font-medium text-secondary mb-1">
+          <div className="flex items-center">
+            <img
+              src="/cours-active.svg"
+              alt="cours"
+              className="w-5 h-5 2xl:w-10 2xl:h-10 mr-1"
+            />
+            <span className="capitalize text-base font-bold 2xl:text-3xl">
+              {course.replace(/-/g, " ")}
+            </span>
+          </div>
+          <span className="text-base 2xl:text-2xl">{progress}%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+          <div
+            className="bg-primary h-1.5 transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
 
       {/* Viewer */}
       <div
         ref={viewerRef}
-        className={`p-4 ${isFullscreen ? "fixed inset-0  bg-white" : ""}`}
+        className={`2xl:p-4 ${
+          isFullscreen ? "fixed inset-0 bg-white z-50" : ""
+        }`}
       >
-        <div className="relative " ref={containerRef}>
+        <div className="relative" ref={containerRef}>
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className="max-h-[70vh]  overflow-y-auto hide-scrollbar"
+            className="max-h-[50vh] md:max-h-[55vh] 2xl:max-h-[62vh] overflow-y-auto hide-scrollbar"
             style={{
               scrollBehavior: "smooth",
               WebkitOverflowScrolling: "touch",
@@ -187,31 +226,39 @@ function CourseContent() {
               file="/test.pdf"
               onLoadSuccess={onDocumentLoadSuccess}
               className="flex flex-col items-center"
-              loading={<div className="text-center py-10">Loading PDF...</div>}
+              loading={
+                <div className="text-center py-6 text-xs">Loading PDF...</div>
+              }
             >
               {visiblePages.map((pg) => (
                 <div
                   key={`page_wrapper_${pg}`}
                   ref={(el) => (pageRefs.current[pg] = el)}
-                  className="flex justify-center mb-4 w-full"
+                  className="flex justify-center mb-4 w-full" // Increased margin-bottom for better spacing
+                  style={{
+                    minHeight: pageDimensions[pg]
+                      ? `${pageDimensions[pg].height * scale}px`
+                      : "auto",
+                  }}
                 >
                   <div
                     style={{
                       transform: `scale(${scale})`,
                       transformOrigin: "top center",
                     }}
-                    className="max-w-full"
+                    className="max-w-full origin-top" // Added origin-top to ensure scaling from top
                   >
                     <Page
                       pageNumber={pg}
                       width={containerWidth}
                       className="h-auto"
                       loading={
-                        <div className="text-center py-5">
+                        <div className="text-center py-3 text-xs">
                           Loading page {pg}...
                         </div>
                       }
                       renderTextLayer={false}
+                      onLoadSuccess={onPageLoadSuccess}
                     />
                   </div>
                 </div>
@@ -220,76 +267,75 @@ function CourseContent() {
           </div>
 
           {/* Toolbar */}
-          <div className="absolute -bottom-4 left-0 right-0 z-10 flex justify-center">
+          <div className="absolute -bottom-2 left-0 right-0 z-10 flex justify-center">
             <div
-              className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md border border-secondary text-sm font-medium text-gray-700 h-12 w-11/12 shadow-md"
+              className="flex items-center justify-between bg-gray-50 px-2 py-1 rounded-md border border-secondary text-[10px] md:text-xs font-medium text-gray-700 h-8 md:h-9 w-11/12 shadow-md"
               role="toolbar"
             >
               {/* Navigation */}
-              <div className="flex items-center gap-2 pr-3 border-r border-secondary h-full">
+              <div className="flex items-center gap-1 pr-2 border-r border-secondary h-full">
                 <button
                   onClick={() => goToPage(pageNumber - 1)}
                   disabled={pageNumber <= 1}
-                  className="p-1 rounded text-secondary cursor-pointer hover:bg-gray-200 disabled:opacity-40"
+                  className="p-0.5 rounded text-secondary cursor-pointer hover:bg-gray-200 disabled:opacity-40"
                 >
-                  <ChevronUp className="w-4 h-4" />
+                  <ChevronUp className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                 </button>
                 <button
                   onClick={() => goToPage(pageNumber + 1)}
                   disabled={pageNumber >= (numPages || 1)}
-                  className="p-1 rounded text-secondary cursor-pointer hover:bg-gray-200 disabled:opacity-40"
+                  className="p-0.5 rounded text-secondary cursor-pointer hover:bg-gray-200 disabled:opacity-40"
                 >
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                 </button>
               </div>
 
               {/* Center info */}
-              <div className="flex items-center justify-between gap-4 flex-1 px-3 h-full border-r border-secondary">
+              <div className="flex items-center justify-between gap-2 flex-1 px-2 h-full border-r border-secondary">
                 <a
                   href="/test.pdf"
                   download
-                  className="p-1 rounded text-secondary hover:bg-gray-200 cursor-pointer" 
+                  className="p-0.5 rounded text-secondary hover:bg-gray-200 cursor-pointer"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                 </a>
-                <div className="text-toolbar">
-                  Page <span className="font-medium ">{pageNumber}</span> of{" "}
-                  {numPages || "?"}
+                <div>
+                  P {pageNumber}/{numPages || "?"}
                 </div>
                 <input
                   type="text"
                   value={`${Math.round(scale * 100)} %`}
                   readOnly
-                  className="w-16 text-center border border-secondary text-toolbar rounded-md bg-white text-sm"
+                  className="w-12 text-center border border-secondary rounded bg-white text-[10px] md:text-xs"
                 />
               </div>
 
               {/* Zoom + fullscreen */}
-              <div className="flex items-center gap-2 px-3 h-full">
+              <div className="flex items-center gap-1 px-2 h-full">
                 <button
                   onClick={handleZoomOut}
                   disabled={scale <= 0.5}
-                  className="p-1 rounded text-secondary hover:bg-gray-200 disabled:opacity-40 cursor-pointer"
+                  className="p-0.5 rounded text-secondary hover:bg-gray-200 disabled:opacity-40 cursor-pointer"
                 >
-                  <ZoomOut className="w-4 h-4" />
+                  <ZoomOut className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                 </button>
                 <button
                   onClick={handleZoomIn}
                   disabled={scale >= maxScale}
-                  className="p-1 rounded text-secondary  hover:bg-gray-200 disabled:opacity-40 cursor-pointer"
+                  className="p-0.5 rounded text-secondary  hover:bg-gray-200 disabled:opacity-40 cursor-pointer"
                 >
-                  <ZoomIn className="w-4 h-4" />
+                  <ZoomIn className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                 </button>
               </div>
-              <div className="border-l border-secondary pl-3">
+              <div className="border-l border-secondary pl-2">
                 <button
                   onClick={toggleFullscreen}
-                  className="p-1 rounded text-secondary hover:bg-gray-200 cursor-pointer"
+                  className="p-0.5 rounded text-secondary hover:bg-gray-200 cursor-pointer"
                 >
                   {isFullscreen ? (
-                    <Minimize2 className="w-4 h-4" />
+                    <Minimize2 className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                   ) : (
-                    <Maximize2 className="w-4 h-4" />
+                    <Maximize2 className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
                   )}
                 </button>
               </div>
@@ -299,25 +345,15 @@ function CourseContent() {
       </div>
 
       {/* Buttons under viewer */}
-      <div className="flex gap-3 mt-6 justify-end">
-        <button className="bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition font-medium">
+      <div className="flex gap-2 justify-center my-4">
+        <button className="flex items-center gap-2 px-8 py-1.5 text-[11px] md:text-sm  2xl:text-lg  font-manrope font-semibold bg-primary text-white rounded-full shadow hover:bg-secondary transition cursor-pointer">
           Générer flashcards
         </button>
-        <button className="bg-blue-100 text-blue-800 px-5 py-2 rounded-xl shadow hover:bg-blue-200 transition font-medium">
+        <button className="flex items-center gap-2 px-8 py-1.5 text-[11px] md:text-sm font-manrope font-semibold bg-accent text-primary rounded-full shadow hover:bg-secondary transition cursor-pointer 2xl:text-lg">
           Générer questions
         </button>
       </div>
-
-      <style jsx>{`
-        .hide-scrollbar {
-          -ms-overflow-style: none; /* IE and Edge */
-          scrollbar-width: none; /* Firefox */
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none; /* Chrome, Safari and Opera */
-        }
-      `}</style>
-    </>
+    </div>
   );
 }
 

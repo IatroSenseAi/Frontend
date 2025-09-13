@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Chat from "../components/Chat";
 import Specialties from "./cours/Specialties";
@@ -12,6 +12,7 @@ import { useState } from "react";
 function Cours() {
   const { authUser } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
 
   const yearMap = {
     1: "1ère année",
@@ -23,13 +24,23 @@ function Cours() {
     7: "7ème année",
   };
 
+  // Detect exact course content route: /cours/:specialty/:module/:course
+  // This regex matches paths with exactly 3 segments after /cours
+  const isCourseContent = /^\/cours\/[^/]+\/[^/]+\/[^/]+$/.test(
+    location.pathname
+  );
+
   return (
     <div className="flex min-h-screen bg-background font-manrope overflow-hidden">
       <Sidebar />
       <Chat />
-      <div className="flex-1 md:mx-2 lg:mx-10 xl:mx-16 2xl:mx-20 p-2 md:p-3 lg:p-4 xl:p-6 flex flex-col mx-auto">
+
+      {/* central column */}
+      <div
+        className={`flex-1 md:mx-2 lg:mx-10 xl:mx-16 2xl:mx-20 p-2 md:p-3 lg:p-4 xl:pt-6 flex flex-col mx-auto`}
+      >
         {/* HEADER global */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-3 md:mb-4 gap-2.5">
+        <div className="flex flex-col md:flex-row 2xl:pr-4 items-center justify-between mb-3 md:mb-4 gap-2.5">
           <div className="hidden md:flex w-full items-center justify-between">
             <h1 className="text-[clamp(1rem,1.1vw,1.4rem)] 2xl:text-2xl font-bold text-secondary 2xl:mx-6 ">
               Cours
@@ -61,22 +72,34 @@ function Cours() {
           </div>
         </div>
 
-        {/* CONTENU DYNAMIQUE */}
-        <Routes>
-          <Route index element={<Specialties searchQuery={searchQuery} />} />
-          <Route
-            path=":specialty"
-            element={<Modules searchQuery={searchQuery} />}
-          />
-          <Route
-            path=":specialty/:module"
-            element={<Courses searchQuery={searchQuery} />}
-          />
-          <Route
-            path=":specialty/:module/:course"
-            element={<CourseContent searchQuery={searchQuery} />}
-          />
-        </Routes>
+        {/* CONTENU DYNAMIQUE - wrapper relatif pour positionner le footer */}
+        <div className={`relative flex-1 ${isCourseContent ? "pb-12" : ""}`}>
+          <Routes>
+            <Route index element={<Specialties searchQuery={searchQuery} />} />
+            <Route
+              path=":specialty"
+              element={<Modules searchQuery={searchQuery} />}
+            />
+            <Route
+              path=":specialty/:module"
+              element={<Courses searchQuery={searchQuery} />}
+            />
+            <Route
+              path=":specialty/:module/:course"
+              element={<CourseContent searchQuery={searchQuery} />}
+            />
+          </Routes>
+
+          {/* Footer visible ONLY on course-content route */}
+          {isCourseContent && (
+            <div className="absolute left-0 right-0 bottom-0 2xl:bottom-6 flex justify-center">
+              <h1 className="w-full max-w-4xl text-center  md:text-sm text-secondary font-manrope ">
+                Sélectionnez un texte, ou glissez-déposez le PDF pour poser
+                votre question à IatroSense AI.
+              </h1>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

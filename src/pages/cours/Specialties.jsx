@@ -87,31 +87,31 @@ function Specialties({ searchQuery }) {
           {recentCourses.map((course, index) => (
             <div
               key={index}
-              className="course-item bg-white cursor-pointer rounded-2xl shadow-[0px_4px_12px_rgba(0,0,0,0.12)] hover:shadow-lg transition-all duration-300 py-3 px-4"
+              className="bg-white cursor-pointer rounded-2xl 2xl:rounded-4xl shadow-[0px_4px_12px_rgba(0,0,0,0.12)] hover:shadow-lg transition-all duration-300 py-3 px-4 2xl:py-6 2xl:px-7 block "
             >
-              <div className="hidden md:grid grid-cols-12 items-center gap-3">
+              <div className="hidden md:grid grid-cols-12 items-center gap-3 ">
                 <div className="col-span-6 flex items-center gap-2">
                   <img
-                    src="/cours-active.svg"
+                    src="/flashcards-active.svg"
                     alt="cours"
-                    className="course-icon h-8 w-8"
+                    className=" h-8 w-8 2xl:h-10 2xl:w-10"
                   />
-                  <span className="course-name font-medium text-gray-900 text-sm">
+                  <span className=" font-bold text-secondary text-sm 2xl:text-lg ">
                     {course.name}
                   </span>
                 </div>
-                <div className="col-span-3 flex items-center gap-2 text-gray-600 text-xs">
+                <div className="col-span-3 flex items-center gap-2 text-secondary text-sm 2xl:text-lg">
                   <Calendar className="w-3 h-3" />
-                  <span className="course-date">{course.startDate}</span>
+                  <span className="">{course.startDate}</span>
                 </div>
                 <div className="col-span-3 flex items-center gap-2">
                   <div className="flex-1 bg-gray-200 rounded-full h-1.5">
                     <div
-                      className="bg-blue-600 h-1.5 rounded-full"
+                      className="bg-secondary h-1.5 rounded-full"
                       style={{ width: `${course.progress}%` }}
                     ></div>
                   </div>
-                  <span className="course-progress text-xs font-medium text-blue-600">
+                  <span className=" text-xs 2xl:text-lg font-medium text-secondary">
                     {course.progress}%
                   </span>
                 </div>
@@ -131,7 +131,7 @@ function Specialties({ searchQuery }) {
                   </div>
                   <div className="flex items-center gap-1 text-gray-600 text-xs">
                     <Calendar className="w-3 h-3" />
-                    <span>{course.startDate}</span>
+                    <span>{course.date}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
